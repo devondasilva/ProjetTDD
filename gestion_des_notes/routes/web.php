@@ -6,6 +6,8 @@ use App\Http\Controllers\UEController;
 use App\Http\Controllers\ECController;
 use App\Http\Controllers\NoteController;
 
+use App\Http\Controllers\ResultController;
+
 // Routes pour la gestion des ECs
 Route::prefix('ecs')->group(function () {
     Route::get('/', [ECController::class, 'index'])->name('ecs.index'); // Liste des ECs
@@ -31,13 +33,7 @@ Route::prefix('ues')->group(function () {
 
 
 
-Route::get('/', function () {
-    return view('dashboard');
-});
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -46,8 +42,14 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('ues', UEController::class);
-Route::resource('ecs', ECController::class);
 Route::resource('notes', NoteController::class);
+Route::get('/results', [ResultController::class, 'index'])->name('results.index');
+
+
+Route::get('/', function () {
+    return view('home');
+})->name('home');
+
 
 
 require __DIR__.'/auth.php';

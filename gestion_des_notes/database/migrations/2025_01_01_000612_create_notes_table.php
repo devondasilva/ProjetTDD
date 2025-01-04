@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ec_id')->constrained()->onDelete('cascade');
-            $table->foreignId('etudiant_id')->constrained()->onDelete('cascade'); // Relation avec table étudiants
-            $table->float('note')->nullable(); // Note principale
-            $table->float('rattrapage')->nullable(); // Note de rattrapage
+            $table->foreignId('etudiant_id')->constrained('etudiants')->onDelete('cascade'); // Clé étrangère vers etudiants
+            $table->foreignId('ec_id')->constrained('elements_constitutifs')->onDelete('cascade'); // Clé étrangère vers elements_constitutifs
+            $table->decimal('note', 5, 2);
+            $table->enum('session', ['normale', 'rattrapage']);
+            $table->date('date_evaluation');
             $table->timestamps();
         });
-
     }
 
     /**
