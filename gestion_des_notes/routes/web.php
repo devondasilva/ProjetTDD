@@ -5,6 +5,12 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use App\Http\Controllers\NoteController;
+use App\Http\Controllers\ResultController;
+
+
+use App\Http\Controllers\UEController;
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -23,5 +29,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::resource('ues', UEController::class);
+Route::resource('notes', NoteController::class);
+Route::get('/results', [ResultController::class, 'index'])->name('results.index');
+
+
+Route::get('/', function () {
+    return view('home');
+})->name('home');
+
+
 
 require __DIR__.'/auth.php';

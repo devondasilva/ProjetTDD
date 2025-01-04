@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('unites_enseignement', function (Blueprint $table) {
+        Schema::create('etudiants', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 10)->unique();
+            $table->string('numero_etudiant')->unique();
             $table->string('nom');
-            $table->integer('credits_ects');
-            $table->foreignId('semestre');
+            $table->string('prenom');
+            $table->enum('niveau', ['L1', 'L2', 'L3']); // Niveau d'étude
             $table->timestamps();
-             
         });
-        
     }
 
     /**
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('unites_enseignement');
+        Schema::dropIfExists('etudiants');
     }
 };

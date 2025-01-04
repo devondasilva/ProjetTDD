@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('unites_enseignement', function (Blueprint $table) {
+        Schema::create('elements_constitutifs', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 10)->unique();
+            $table->string('code');
             $table->string('nom');
-            $table->integer('credits_ects');
-            $table->foreignId('semestre');
+            $table->decimal('coefficient', 5, 2);
+            $table->foreignId('ue_id')->constrained('unites_enseignement')->onDelete('cascade'); // Clé étrangère vers unites_enseignement
             $table->timestamps();
-             
         });
-        
     }
 
     /**
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('unites_enseignement');
+        Schema::dropIfExists('elements_constitutifs');
     }
 };
