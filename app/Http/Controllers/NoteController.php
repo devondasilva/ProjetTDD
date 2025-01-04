@@ -9,11 +9,13 @@ use Illuminate\Http\Request;
 class NoteController extends Controller
 {
     public function create()
-    {
-        $etudiants = Etudiant::all();
-        $ecs = EC::all();
-        return view('notes.create', compact('etudiants', 'ecs'));
-    }
+{
+    $etudiants = Etudiant::all();
+    $ecs = EC::all();
+    $ecs = EC::with('unites_enseignement')->get();
+    return view('notes.create', compact('etudiants', 'ecs'));
+}
+
 
     public function store(Request $request)
     {
@@ -22,6 +24,7 @@ class NoteController extends Controller
             'ec_id' => 'required|exists:elements_constitutifs,id',
             'note' => 'required|numeric|min:0|max:20',
             'session' => 'required|in:normale,rattrapage',
+            
         ]);
 
         Note::create($validated);
@@ -62,6 +65,7 @@ class NoteController extends Controller
             $ec = $note->ec;
             $sommeNotes += $note->note * $ec->coefficient;
             $totalCoefficient += $ec->coefficient;
+            
         }
 
         return $totalCoefficient > 0 ? $sommeNotes / $totalCoefficient : 0;

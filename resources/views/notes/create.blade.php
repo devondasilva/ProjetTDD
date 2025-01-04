@@ -3,9 +3,12 @@
     <!-- Sélection de l'Élément Constitutif -->
     <div class="mb-4">
         <label for="ec_id" class="block text-sm font-medium text-gray-700">Élément Constitutif</label>
-        <select name="ec_id" id="ec_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+        <select name="ec_id" id="ec_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+            <option value="">-- Sélectionnez un élément constitutif --</option>
             @foreach($ecs as $ec)
-                <option value="{{ $ec->id }}">{{ $ec->code }} - {{ $ec->nom }}</option>
+                <option value="{{ $ec->id }}">
+                    {{ $ec->code }} - {{ $ec->nom }} ({{ $ec->uniteEnseignement->nom }})
+                </option>
             @endforeach
         </select>
         @error('ec_id')

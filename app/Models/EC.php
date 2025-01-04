@@ -13,4 +13,9 @@ class EC extends Model
 
     // Vous pouvez également définir les colonnes qui sont autorisées pour l'insertion
     protected $fillable = ['code', 'nom', 'coefficient', 'ue_id'];
+
+    public function Unites_enseignement()
+    {
+        return $this->belongsTo(Unites_enseignement::class, 'ue_id');
+    }
 }

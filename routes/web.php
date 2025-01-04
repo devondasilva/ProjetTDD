@@ -28,5 +28,7 @@ Route::middleware('auth')->group(function () {
 Route::get('notes/create', [NoteController::class, 'create'])->name('notes.create');
 Route::post('notes', [NoteController::class, 'store'])->name('notes.store');
 Route::resource('notes', NoteController::class)->except(['show']);
+Route::get('/notes/{note}/edit', [NoteController::class, 'edit'])->name('notes.edit');
+
 
 require __DIR__.'/auth.php';
