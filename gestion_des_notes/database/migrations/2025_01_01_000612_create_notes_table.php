@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('etudiant_id')->constrained('etudiants')->onDelete('cascade'); // Clé étrangère vers etudiants
-            $table->foreignId('ec_id')->constrained('elements_constitutifs')->onDelete('cascade'); // Clé étrangère vers elements_constitutifs
+            $table->foreignId('ec_id')->constrained('ecs')->onDelete('cascade'); // Clé étrangère vers elements_constitutifs
             $table->decimal('note', 5, 2);
             $table->enum('session', ['normale', 'rattrapage']);
             $table->date('date_evaluation');
