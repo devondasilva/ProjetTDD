@@ -17,16 +17,22 @@ return new class extends Migration
             $table->string('nom');
             $table->integer('coefficient');
             $table->foreignId('ue_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('responsable_id')->nullable();
+            $table->foreign('responsable_id')->references('id')->on('enseignants')->onDelete('set null');
             $table->timestamps();
         });
 
     }
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('ecs');
+        Schema::table('ecs', function (Blueprint $table) {
+            $table->dropForeign(['responsable_id']);
+            $table->dropColumn('responsable_id');
+        });
     }
 };

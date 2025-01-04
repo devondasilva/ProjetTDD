@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\EC;
 use App\Models\UE;
 use Illuminate\Http\Request;
+use App\Models\Enseignant;
 
 class ECController extends Controller
 {
@@ -24,28 +25,35 @@ class ECController extends Controller
         $request->validate([
             'code' => 'required|unique:ecs,code',
             'nom' => 'required',
-            'coefficient' => 'required|integer',
+            'coefficient' => 'required|integer|between:1,5',
             'ue_id' => 'required|exists:ues,id',
+            'enseignant_id' => 'required|exists:enseignants,id',
         ]);
 
         EC::create($request->all());
         return redirect()->route('ecs.index')->with('success', 'EC créé avec succès.');
     }
 
-    public function edit(EC $ec)
+    public function edit(EC $ec,)
     {
+
         $ues = UE::all();
-        return view('ecs.edit', compact('ec', 'ues'));
+        $enseignants = Enseignant::all();
+        return view('ecs.edit', compact('ec', 'ues', 'enseignants'));
     }
 
-    public function update(Request $request, EC $ec)
+    public function update(Request $request, EC $ec, $id)
     {
         $request->validate([
             'code' => 'required|unique:ecs,code,' . $ec->id,
             'nom' => 'required',
-            'coefficient' => 'required|integer',
+            'coefficient' => 'required|integer|between:1,5',
             'ue_id' => 'required|exists:ues,id',
+            'responsable_id' => 'required|exists:enseignants,id',
         ]);
+        $ec = EC::findOrFail($id);
+        $ec->responsable_id = $request->input('responsable_id');
+        $ec->save();
 
         $ec->update($request->all());
         return redirect()->route('ecs.index')->with('success', 'EC mis à jour avec succès.');

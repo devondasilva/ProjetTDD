@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ues', function (Blueprint $table) {
+        Schema::create('enseignants', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
-            $table->string('nom');
-            $table->integer('credits');
-            $table->foreignId('semestre');
+            $table->string('nom');  // Nom de l'enseignant
+            $table->string('prenom');  // Prénom de l'enseignant
+            $table->string('telephone')->nullable();
             $table->timestamps();
-
         });
     }
 
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ues');
+        Schema::dropIfExists('enseignants');
     }
 };

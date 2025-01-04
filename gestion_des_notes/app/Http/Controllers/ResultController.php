@@ -2,59 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Etudiant;
-use App\Models\UE;
-use App\Models\Note;
+use App\Services\EtudiantService;
+use App\Services\UEService;
+use Illuminate\Http\Request;
 
 class ResultController extends Controller
 {
+    protected $etudiantService;
+    protected $ueService;
+
+    public function __construct(EtudiantService $etudiantService, UEService $ueService)
+    {
+        $this->etudiantService = $etudiantService;
+        $this->ueService = $ueService; //
+    }
+
     /**
-     * Affiche les résultats des étudiants.
-     *
-     * @return \Illuminate\View\View
+     * Afficher les résultats de tous les étudiants
      */
     public function index()
     {
-        // Récupérer tous les étudiants
         $etudiants = Etudiant::all();
+        $resultats = [];
 
-        // Préparer les résultats
-        $results = [];
+        // Récupérer les résultats et vérifier si chaque étudiant peut passer à l'année suivante
         foreach ($etudiants as $etudiant) {
-            $ues = UE::with('ecs')->get();
-            foreach ($ues as $ue) {
-                $notes = Note::whereIn('ec_id', $ue->ecs->pluck('id'))
-                             ->where('etudiant_id', $etudiant->id)
-                             ->get();
+            $totalCredits = 0;
 
-                // Calculer la moyenne par UE
-                $totalNotes = 0;
-                $totalCoeff = 0;
-                foreach ($notes as $note) {
-                    $totalNotes += $note->note * $note->ec->coefficient;
-                    $totalCoeff += $note->ec->coefficient;
-                }
-                $moyenne = $totalCoeff > 0 ? $totalNotes / $totalCoeff : 0;
-
-                // Vérifier la validation de l'UE
-                $ueValidee = $moyenne >= 10;
-
-                // Calcul des crédits acquis
-                $credits = $ueValidee ? $ue->credits_ects : 0;
-
-                // Ajouter les résultats
-                $results[] = [
-                    'etudiant' => $etudiant->nom,
-                    'ue'       => $ue->nom,
-                    'moyenne'  => number_format($moyenne, 2),
-                    'credits'  => $credits,
-                    'valide'   => $ueValidee,
-                ];
+            // Calculer les crédits pour chaque UE associée à l'étudiant
+            foreach ($etudiant->ues as $ue) {
+                $note = $ue->pivot->note; // Si les notes sont dans une table pivot
+                $totalCredits += $this->ueService->calculerCreditsECTS($ue, $note); // Utiliser l'instance de UEService
             }
+
+            // Vérification du passage à l'année suivante
+            $peutPasser = $this->etudiantService->passageAnneeSuivante($etudiant);
+
+            // Ajout des résultats à la liste
+            $resultats[] = [
+                'etudiant' => $etudiant,
+                'totalCredits' => $totalCredits,
+                'peutPasser' => $peutPasser
+            ];
         }
 
-        // Retourner la vue avec les résultats
-        return view('results.index', compact('results'));
+        // Passer les résultats à la vue
+        return view('resultats.index', compact('resultats'));
     }
 }

@@ -18,4 +18,17 @@ class UE extends Model
     {
         return $this->hasMany(EC::class);
     }
+
+    public function etudiants()
+{
+    return $this->belongsToMany(Etudiant::class, 'inscriptions', 'ue_id', 'etudiant_id')
+                ->withPivot('semestre', 'validated')
+                ->withTimestamps();
+}
+
+public function estValidee($note)
+{
+    return $note >= 10;
+}
+
 }

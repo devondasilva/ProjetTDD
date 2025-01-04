@@ -9,11 +9,17 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}">Gestion Notes</a>
+             <!-- Logo dans la navbar -->
+             <a class="navbar-brand" href="{{ route('home') }}">
+                <img src="{{ asset('LOGO.png') }}" alt="Logo" class="d-inline-block align-top" height="40"> <!-- Vous pouvez ajuster la taille ici -->
+            </a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('ues.index') }}">UEs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('ecs.index') }}">ECs</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('notes.index') }}">Notes</a>
@@ -21,6 +27,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('results.index') }}">Résultats</a>
                     </li>
+                    
                 </ul>
             </div>
         </div>
