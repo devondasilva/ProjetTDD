@@ -8,7 +8,7 @@
         <a href="{{ route('ues.index') }}" class="btn btn-primary btn-lg">Gérer les UEs</a>
         <a href="{{ route('ecs.index') }}" class="btn btn-primary btn-lg">Gérer les ECs</a>
         <a href="{{ route('notes.create') }}" class="btn btn-primary btn-lg">Saisir les Notes</a>
-        <a href="{{ route('results.index') }}" class="btn btn-primary btn-lg">Consulter les Résultats</a>
+        <a href="{{ route('resultats.index') }}" class="btn btn-primary btn-lg">Consulter les Résultats</a>
 
     </div>
 </div>

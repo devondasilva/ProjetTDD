@@ -1,36 +1,29 @@
-@extends('layouts.app')
+<form action="{{ route('notes.store') }}" method="POST">
+    @csrf
 
-@section('content')
-<div class="container">
-    <h2 class="my-4">Tableau des Notes</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Étudiant</th>
-                <th>EC</th>
-                <th>Note</th>
-                <th>Session</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($notes as $note)
-                <tr>
-                    <td>{{ $note->etudiant->nom }}</td>
-                    <td>{{ $note->ec->nom }}</td>
-                    <td>{{ $note->note }}</td>
-                    <td>{{ ucfirst($note->session) }}</td>
-                    <td>
-                        <a href="{{ route('notes.edit', $note->id) }}" class="btn btn-sm btn-warning">Modifier</a>
-                        <form action="{{ route('notes.destroy', $note->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
-                        </form>
-                    </td>
-                </tr>
+    <!-- Sélection de l'étudiant -->
+    <div class="mb-4">
+        <label for="etudiant_id" class="block text-sm font-medium text-gray-700">Étudiant</label>
+        <select name="etudiant_id" id="etudiant_id" class="form-select mt-1 block w-full" required>
+            <option value="">Sélectionner un étudiant</option>
+            @foreach($etudiants as $etudiant)
+                <option value="{{ $etudiant->id }}">{{ $etudiant->nom }} {{ $etudiant->prenom }}</option>
             @endforeach
-        </tbody>
-    </table>
-</div>
-@endsection
+        </select>
+    </div>
+
+    <!-- Sélection de l'EC -->
+    <div class="mb-4">
+        <label for="ec_id" class="block text-sm font-medium text-gray-700">Élément Constitutif (EC)</label>
+        <select name="ec_id" id="ec_id" class="form-select mt-1 block w-full" required>
+            <option value="">Sélectionner un EC</option>
+            @foreach($ecs as $ec)
+                <option value="{{ $ec->id }}">{{ $ec->nom }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <!-- Autres champs de formulaire... -->
+
+    <button type="submit" class="btn btn-primary">Enregistrer la note</button>
+</form>

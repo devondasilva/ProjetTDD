@@ -8,18 +8,22 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('enseignants', function (Blueprint $table) {
+        Schema::create('ecs', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
             $table->string('nom');
-            $table->string('prenom');
-            $table->string('email')->unique();
-            $table->string('telephone')->nullable();
+            $table->integer('coefficient')->unsigned();
+            $table->foreignId('ue_id');
+            $table->foreignId('responsable_id'); // Permet les valeurs nulles
             $table->timestamps();
         });
+
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('enseignants');
+
+
+        Schema::dropIfExists('ecs');
     }
 };

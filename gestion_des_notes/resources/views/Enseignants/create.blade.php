@@ -2,48 +2,33 @@
 
 @section('content')
 <div class="container">
-    <h1 class="my-4">Créer un Enseignant</h1>
+    <h1 class="my-4">Ajouter un Enseignant</h1>
     <form action="{{ route('enseignants.store') }}" method="POST">
         @csrf
 
-        <!-- Nom -->
         <div class="mb-3">
             <label for="nom" class="form-label">Nom</label>
-            <input 
-                type="text" 
-                name="nom" 
-                id="nom" 
-                class="form-control" 
-                placeholder="Entrez le nom de l'enseignant" 
-                required>
+            <input type="text" name="nom" id="nom" class="form-control" required>
         </div>
 
-        <!-- Prénom -->
         <div class="mb-3">
             <label for="prenom" class="form-label">Prénom</label>
-            <input 
-                type="text" 
-                name="prenom" 
-                id="prenom" 
-                class="form-control" 
-                placeholder="Entrez le prénom de l'enseignant" 
-                required>
+            <input type="text" name="prenom" id="prenom" class="form-control" required>
         </div>
 
-        <!-- Téléphone -->
         <div class="mb-3">
-            <label for="telephone" class="form-label">Numéro de téléphone</label>
-            <input 
-                type="text" 
-                name="telephone" 
-                id="telephone" 
-                class="form-control" 
-                placeholder="Entrez le numéro de téléphone" 
-                required>
+            <label for="email" class="form-label">Email</label>
+            <input type="email" name="email" id="email" class="form-control" required>
         </div>
 
-        <!-- Bouton de soumission -->
-        <button type="submit" class="btn btn-primary">Créer</button>
+        <div class="mb-3">
+            <label for="telephone" class="form-label">Téléphone</label>
+            <input type="text" name="telephone" id="telephone" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Ajouter l'Enseignant</button>
+        </div>
     </form>
 </div>
 @endsection

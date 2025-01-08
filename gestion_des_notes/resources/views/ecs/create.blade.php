@@ -7,15 +7,15 @@
         @csrf
         <div class="mb-3">
             <label for="code" class="form-label">Code de l'EC</label>
-            <input type="text" name="code" id="code" class="form-control" required>
+            <input type="text" name="code" id="code" class="form-control" placeholder="Ex : MAT101" required>
         </div>
         <div class="mb-3">
             <label for="nom" class="form-label">Nom de l'EC</label>
-            <input type="text" name="nom" id="nom" class="form-control" required>
+            <input type="text" name="nom" id="nom" class="form-control" placeholder="Ex : Mathématiques" required>
         </div>
         <div class="mb-3">
             <label for="coefficient" class="form-label">Coefficient</label>
-            <input type="number" name="coefficient" id="coefficient" class="form-control" required>
+            <input type="number" name="coefficient" id="coefficient" class="form-control" placeholder="Ex : 3" required>
         </div>
         <div class="mb-3">
             <label for="ue_id" class="form-label">UE Associée</label>
@@ -23,6 +23,15 @@
                 <option value="" disabled selected>Choisir une UE</option>
                 @foreach ($ues as $ue)
                 <option value="{{ $ue->id }}">{{ $ue->nom }} ({{ $ue->code }})</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="responsable_id" class="form-label">Responsable de l'EC</label>
+            <select name="responsable_id" id="responsable_id" class="form-select">
+                <option value="" disabled selected>Choisir un responsable</option>
+                @foreach ($enseignants as $enseignant)
+                <option value="{{ $enseignant->id }}">{{ $enseignant->name }}</option>
                 @endforeach
             </select>
         </div>

@@ -1,67 +1,75 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\EC;
-use App\Models\UE;
-use Illuminate\Http\Request;
+use App\Models\Ec;
+use App\Models\Ue;
 use App\Models\Enseignant;
+use Illuminate\Http\Request;
 
 class ECController extends Controller
 {
+    // Afficher la liste des ECs
     public function index()
     {
-        $ecs = EC::with('ue')->get(); // Récupère tous les ECs avec leurs UE associées
+        $ecs = Ec::with('ue')->get();  // Récupérer tous les ECs avec leur UE associée
         return view('ecs.index', compact('ecs'));
     }
 
+    // Afficher le formulaire de création
     public function create()
     {
-        $ues = UE::all(); // Récupère toutes les UEs pour le formulaire
-        return view('ecs.create', compact('ues'));
+        $ues = Ue::all();  // Récupérer toutes les UEs pour les afficher dans le formulaire
+        $enseignants = Enseignant::all();  // Récupérer tous les enseignants
+        return view('ecs.create', compact('ues', 'enseignants'));
     }
 
+    // Enregistrer un nouvel EC
     public function store(Request $request)
     {
+        // Validation des données du formulaire
         $request->validate([
-            'code' => 'required|unique:ecs,code',
-            'nom' => 'required',
-            'coefficient' => 'required|integer|between:1,5',
+            'code' => 'required|unique:ecs|string|max:255',
+            'nom' => 'required|string|max:255',
+            'coefficient' => 'required|integer|min:1',
             'ue_id' => 'required|exists:ues,id',
-            'enseignant_id' => 'required|exists:enseignants,id',
+            'responsable_id' => 'nullable|exists:enseignants,id',
         ]);
 
-        EC::create($request->all());
-        return redirect()->route('ecs.index')->with('success', 'EC créé avec succès.');
+        Ec::create($request->all());
+
+        return redirect()->route('ecs.index')->with('success', 'EC créé avec succès');
     }
 
-    public function edit(EC $ec,)
+    // Afficher le formulaire d'édition
+    public function edit(Ec $ec)
     {
-
-        $ues = UE::all();
+        $ues = Ue::all();
         $enseignants = Enseignant::all();
         return view('ecs.edit', compact('ec', 'ues', 'enseignants'));
     }
 
-    public function update(Request $request, EC $ec, $id)
+    // Mettre à jour un EC existant
+    public function update(Request $request, Ec $ec)
     {
+        // Validation des données du formulaire
         $request->validate([
-            'code' => 'required|unique:ecs,code,' . $ec->id,
-            'nom' => 'required',
-            'coefficient' => 'required|integer|between:1,5',
+            'code' => 'required|string|max:255|unique:ecs,code,' . $ec->id,
+            'nom' => 'required|string|max:255',
+            'coefficient' => 'required|integer|min:1',
             'ue_id' => 'required|exists:ues,id',
-            'responsable_id' => 'required|exists:enseignants,id',
+            'responsable_id' => 'nullable|exists:enseignants,id',
         ]);
-        $ec = EC::findOrFail($id);
-        $ec->responsable_id = $request->input('responsable_id');
-        $ec->save();
 
         $ec->update($request->all());
-        return redirect()->route('ecs.index')->with('success', 'EC mis à jour avec succès.');
+
+        return redirect()->route('ecs.index')->with('success', 'EC mis à jour avec succès');
     }
 
-    public function destroy(EC $ec)
+    // Supprimer un EC
+    public function destroy(Ec $ec)
     {
         $ec->delete();
-        return redirect()->route('ecs.index')->with('success', 'EC supprimé avec succès.');
+        return redirect()->route('ecs.index')->with('success', 'EC supprimé avec succès');
     }
 }

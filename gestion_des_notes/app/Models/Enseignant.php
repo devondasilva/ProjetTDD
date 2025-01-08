@@ -10,8 +10,12 @@ class Enseignant extends Model
     //
     use HasFactory;
 
-    protected $fillable = ['nom', 'prenom', 'telephone'];
-
+    protected $fillable = [
+        'nom',
+        'prenom',
+        'email',
+        'telephone',
+    ];
     public function ecs()
     {
         return $this->hasMany(EC::class, 'responsable_id');

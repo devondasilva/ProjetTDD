@@ -14,11 +14,29 @@ return new class extends Migration
         Schema::create('notes', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->foreignId('etudiant_id')->constrained('etudiants')->onDelete('cascade'); // Clé étrangère vers etudiants
-            $table->foreignId('ec_id')->constrained('ecs')->onDelete('cascade'); // Clé étrangère vers elements_constitutifs
-            $table->decimal('note', 5, 2);
+
+            // Clé étrangère vers 'etudiants'
+            $table->foreignId('etudiant_id')
+                ->constrained('etudiants')  // Ajoute la contrainte pour la table 'etudiants'
+                ->onDelete('cascade');     // Supprime les notes si l'étudiant est supprimé
+            $table->index('etudiant_id'); // Ajout de l'index explicitement
+
+            // Clé étrangère vers 'ecs'
+            $table->foreignId('ec_id')
+                ->constrained('ecs')       // Ajoute la contrainte pour la table 'ecs'
+                ->onDelete('cascade');     // Supprime les notes si l'EC est supprimé
+            $table->index('ec_id'); // Ajout de l'index explicitement
+
+            // Note de l'étudiant pour cet EC
+            $table->decimal('note', 5, 2)
+                ->check('note >= 0 and note <= 20'); // Validation de la note entre 0 et 20
+
+            // Session d'évaluation (normale ou rattrapage)
             $table->enum('session', ['normale', 'rattrapage']);
+
+            // Date d'évaluation
             $table->date('date_evaluation');
+
             $table->timestamps();
         });
     }
@@ -28,8 +46,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('notes', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('notes');
     }
 };
+
