@@ -21,19 +21,33 @@ class UEController extends Controller
     }
 
     // Enregistrer une nouvelle UE dans la base de données
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'code' => ['required', 'regex:/^UE[0-9]{2}$/', 'unique:ues,code'],
+    //         'nom' => 'required',
+    //         'credits' => 'required|integer',
+    //         'semestre' => 'required|integer|min:1|max:6',
+    //     ]);
+
+    //     UE::create($request->all());
+
+    //     return redirect()->route('ues.index')->with('success', 'UE créée avec succès!');
+    // }
     public function store(Request $request)
     {
-        $request->validate([
-            'code' => ['required', 'regex:/^UE[0-9]{2}$/', 'unique:ues,code'],
-            'nom' => 'required',
-            'credits' => 'required|integer',
+        $validated = $request->validate([
+            'code' => 'required|regex:/^UE[0-9]{2}$/',
+            'nom' => 'required|string|max:255',
+            'credits' => 'required|integer|min:1|max:30',
             'semestre' => 'required|integer|min:1|max:6',
         ]);
 
-        UE::create($request->all());
+        $ue = UE::create($validated);
 
-        return redirect()->route('ues.index')->with('success', 'UE créée avec succès!');
+        return response()->json($ue, 201);
     }
+
 
     // Afficher le formulaire pour modifier une UE existante
     public function edit(UE $ue)

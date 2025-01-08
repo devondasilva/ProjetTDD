@@ -6,25 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('ues', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
             $table->string('nom');
-            $table->integer('credits');
-            $table->foreignId('semestre');
+            $table->unsignedInteger('credits');
+            $table->unsignedInteger('semestre');
             $table->timestamps();
-
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('ues');

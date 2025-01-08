@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\EC;
 use App\Models\UE;
 use App\Models\Etudiant;
+use App\Models\Enseignant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -13,19 +14,23 @@ class ECTest extends TestCase
     use RefreshDatabase;
 
     // Création d'un EC avec coefficient
-    public function test_creation_ec_avec_coefficient()
+    public function test_ec_creation()
     {
-        $ue = UE::factory()->create();
-        $ec = EC::factory()->create([
-            'coefficient' => 3,
-            'ue_id' => $ue->id
-        ]);
+        // Crée un EC avec ses associations
+        $ec = EC::factory()->create();
 
-        $this->assertDatabaseHas('elements_constitutifs', [
-            'coefficient' => 3
-        ]);
+        // Vérifie que l'EC est correctement associé à une UE et un responsable
+        $this->assertNotNull($ec->ue_id);
+        $this->assertNotNull($ec->responsable_id);
+
+        // Vérifie que l'UE existe réellement
+        $ue = UE::find($ec->ue_id);
+        $this->assertNotNull($ue);
+
+        // Vérifie que l'enseignant (responsable) existe réellement
+        $enseignant = Enseignant::find($ec->responsable_id);
+        $this->assertNotNull($enseignant);
     }
-
     // Vérification du rattachement à une UE
     public function test_rattachement_ec_ue()
     {

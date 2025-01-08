@@ -38,7 +38,7 @@ class Etudiant extends Model
                     ->withPivot('semestre', 'validated')
                     ->withTimestamps();
     }
-
+    
     /**
      * Relation : Un étudiant a plusieurs notes (par EC).
      */
